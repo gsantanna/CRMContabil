@@ -1,0 +1,19 @@
+﻿
+@model bie.focuscrm.ui.viewmodel.ErroLogadoViewmodel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3> Ops! Algo deu errado!</h3>
+
+@Model.descricao
+
+
+<br /> <br/>
+
+
+<a href="@Model.retorno">
+Clique aqui para voltar
+    </a>
+

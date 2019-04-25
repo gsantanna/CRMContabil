@@ -1,0 +1,33 @@
+﻿@model bie.focuscrm.ui.mvc.Models.IndexViewModel
+
+
+
+@{
+    ViewBag.Title = "Gerenciar conta";
+    ViewBag.HeaderText = ViewBag.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Modificar dados da sua conta</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Senha:</dt>
+        <dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Modificar sua senha", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Criar senha", "SetPassword")
+            }
+            ]
+        </dd>
+    </dl>
+
+</div>

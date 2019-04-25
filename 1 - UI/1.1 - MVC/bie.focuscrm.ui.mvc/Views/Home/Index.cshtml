@@ -1,0 +1,217 @@
+﻿@model bie.focuscrm.ui.viewmodel.HomeViewmodel
+
+@{
+    ViewBag.Title = "Central de Atendimento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (Model.Alertas.Count > 0)
+{
+
+
+    foreach (var alerta in Model.Alertas)
+    {
+
+
+        <div role="alert" class="alert alert-@alerta.classe_bootstrap alert-dismissible">
+            <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>
+            <span class="icon s7-check"></span>
+            <strong>@Html.Raw(alerta.Titulo) </strong> @Html.Raw(alerta.Conteudo)
+        </div>
+
+    }
+
+
+}
+
+<div class="col-sm-8">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="title">Meus Atendimentos</span>
+        </div>
+        <div class="panel-body">
+
+            <table class="table table-striped table-responsive table-hover" id="tblMain">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Setor</th>
+                        <th>Responsavel Fócus</th>
+                        <th>Responsável Cliente</th>
+                        <th style="width:10px"></th>
+                    </tr>
+                </thead>
+
+                @foreach (var item in Model.MeusAtendimentos.OrderByDescending(x => x.DataAgendada))
+                {
+                    <tr>
+                        <td>
+                            @item.DataAgendada.ToString("yyyy-MM-dd HH:mm:ss")
+                        </td>
+                        <td>@item.NomeSetor </td>
+                        <td>@item.FuncionariosFocus </td>
+                        <td>@item.FuncionariosCliente </td>
+                        <td>
+                            <a href='javascript:abreatendimento(@item.id_atendimento)' title="Abrir" class="btn btn-default"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </table>
+
+
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="col-sm-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="title">Pendências</span>
+        </div>
+        <div class="panel-body">
+
+            @if (ViewBag.Admin) //desenhar demonstrativo
+            {
+                <div class="list-group">
+
+                    @foreach (var item in Model.PendenciasConsolidadas)
+                    {
+                        <a href='@Url.Action("index","Pendencias",new { item.id_setor  })' class="list-group-item"><span class="badge"> @item.qtd </span> @item.nomesetor </a>
+                    }
+
+                </div>
+
+
+            }
+            else
+            {
+                <div class="list-group">
+
+                    @foreach (var pendencia in Model.MinhasPendencias)
+                    {
+
+                        <a href='@Url.Action("Editar","Pendencias",new { id = pendencia.id_pendencia })' class='list-group-item @(pendencia.InfoStatus=="Atraso" ? "active":"") ' > @pendencia.Titulo <br/>Prazo: @pendencia.Prazo.ToString("dd/MM/yyyy HH:mm") </a>
+
+                    }
+                  
+                </div>
+
+
+
+            }
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+
+        var tabela;
+
+        $(document).ready(function () {
+
+            $.extend($.fn.dataTableExt.oSort, {
+
+                "date-uk-pre": function (a) {
+                    if (a == null || a == "") {
+                        return 0;
+                    }
+                    //0123456789012345678
+                    //10/10/2010 22:00:00
+
+                    var d = a.substring(0, 10).split('/');
+                    var m = a.substring(11).split(':');
+
+                    var saida = d[2] + d[1] + d[0] + IsNull(m[0], "00") + IsNull(m[1], "00") + IsNull(m[2], "00");
+
+                    return saida * 1;
+
+                },
+
+                "date-uk-asc": function (a, b) {
+                    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                },
+
+                "date-uk-desc": function (a, b) {
+                    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+                }
+            });
+
+
+
+            tabela = $('#tblMain').DataTable({
+                responsive: true,
+                language: { url: '@Url.Content("~/content/lib/jquery.datatables/ptbr.json")' },
+                columns: [
+                    {
+                        title: "Data",
+                        type: "date-uk",
+                        render: formatDate,
+                        bSortable: true
+
+                    },
+                    {
+                        title: "Setor"
+                    },
+                       {
+                           title: "Responsável Focus"
+
+                       },
+                       {
+                           title: "Responsável Cliente"
+                       },
+                       {
+                           title: " "
+
+                       }
+                ],//fim columns
+                order: [[0, "desc"]]
+
+
+            });//fim datatables
+
+            if( getParameterByName("s") != "" && getParameterByName("s") != null )
+            {
+                tabela.search(getParameterByName("s"));
+            }
+
+
+        }); //ready
+
+
+
+        var urlAbrir = '@Url.Action("ata", "atendimentos")';
+        var abreatendimento = function (id)
+        {
+            window.location = urlAbrir + "?id_atendimento=" + id +"&o=home&s=" + tabela.search();
+        }
+
+
+
+
+
+    </script>
+
+
+
+}
+

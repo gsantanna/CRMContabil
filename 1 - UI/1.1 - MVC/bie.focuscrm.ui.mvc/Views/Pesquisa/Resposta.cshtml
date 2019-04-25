@@ -1,0 +1,187 @@
+﻿
+@{
+    ViewBag.Title = "Relatório Pesquisa de Satisfação";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@model List<bie.focuscrm.ui.viewmodel.RelatorioPesquisaSatisfacaoViewmodel>
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Período do Relatório</h3>
+            </div>
+
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <form class="form-inline" name="frmMain" method="post" style="margin-left:40px;">
+                        <div class="form-group">
+
+                            <label class="mr-sm-2" style="text-align:left;margin-right:20px;margin-left:-20px;" for="di">Inicio</label>
+                            <input type="datetime" data-val="true" data-val-date="O campo Inicio deve ser uma data." data-val-required="O campo Inicio é obrigatório." id="di" name="di" style="max-width:200px!important" value="@ViewBag.di" class="form-control mb-2 mr-sm-2 mb-sm-0 dtp" />
+
+
+                            <label class="mr-sm-2" style="text-align:left;margin-left:20px;margin-right:20px;" for="df">Fim</label>
+                            <input type="datetime" data-val="true" data-val-date="O campo fim deve ser uma data.   " data-val-required="O campo fim é obrigatório.   " id="df" name="df" style="max-width:200px!important" value="@ViewBag.df" class="form-control mb-2 mr-sm-2 mb-sm-0 dtp" />
+
+                            <button type="submit" class="btn btn-primary">Pesquisar</button>
+
+                            </div>
+                    </form>
+
+
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <div class="panel-heading">
+                            <h3>Resultado das Pesquisas</h3>
+                        </div>
+
+                        <div id="tblContainer" style="display:none;">
+
+                            <table id="tblMain" class="table" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Titulo</th>
+                                        <th>Descricao</th>
+                                        <th>Data Envio</th>
+                                        <th>Data Resposta</th>
+                                        <th>Questao</th>
+                                        <th>Resposta</th>
+
+                                    </tr>
+                                </thead>
+
+
+                                @foreach (var item in Model)
+                {
+                    foreach (var q in item.Questoes.ToList())
+                    {
+
+                                        <tr>
+                                            <td>
+                                                @item.Titulo
+                                            </td>
+                                            <td>
+                                                @item.Descricao
+                                            </td>
+                                            <td>
+                                                @item.Respostas.FirstOrDefault().DataEnvio.ToString("dd/MM/yyyy HH:mm:ss")
+                                            </td>
+                                            <td>
+                                                @item.Respostas.FirstOrDefault().DataResposta.ToString("dd/MM/yyyy HH:mm:ss")
+                                            </td>
+                                            <td>
+                                                @q.Descricao
+                                            </td>
+                                            <td>
+                                                @item.Respostas.FirstOrDefault().Pesquisa.Respostas.FirstOrDefault().Valores.Where(x => x.id_questao == q.id_questaopesquisa && x.id_respostapesquisa == item.Respostas.FirstOrDefault().id_respostapesquisa).FirstOrDefault().ValorResposta
+                                            </td>
+                                        </tr>
+
+                                    }
+                                }
+
+
+
+
+                            </table>
+
+                        </div><!-- tbl container-->
+
+                    }
+                    else if (Model != null && Model.Count == 0)
+                    {
+                        <div style="margin-left:0px;margin-top:20px;float:left;font-weight:bold;color:#7b7b7b;">Nenhum resultado encontrado</div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts {
+
+    <script src="~/Scripts/datetimepicker/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Content/lib/jquery.datatables/Buttons-1.2.4/js/jszip.min.js"></script>
+    <script src="~/Content/lib/jquery.datatables/Buttons-1.2.4/js/pdfmake.min.js"></script>
+    <script src="~/Content/lib/jquery.datatables/Buttons-1.2.4/js/vfs_fonts.js"></script>
+    <link href="~/Scripts/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+
+
+        $(".dtp").datetimepicker({
+            format: 'd/m/y H:i:s',
+            lang: 'pt-BR',
+            closeOnDateSelect: true
+
+        });
+
+        $.datetimepicker.setLocale('pt-BR');
+
+
+
+        $(document).ready(function () {
+            var tabela = $('#tblMain');
+            if ($(tabela).length > 0) {
+                $(tabela).DataTable({
+                    dom: 'Blfrtip',
+                    language: { url: '@Url.Content("~/content/lib/jquery.datatables/ptbr.json")' },
+                    searching: false,
+                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+
+
+
+                    buttons: [
+                            {
+                                extend: 'copyHtml5',
+                                text: '<i class="fa fa-files-o"></i>',
+                                titleAttr: 'Copiar'
+                            },
+                        {
+                            extend: 'excelHtml5',
+                            text: '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Exportar para Excel'
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            text: '<i class="fa fa-file-text-o"></i>',
+                            titleAttr: 'Exportar cmo CSV'
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'Gerar PDF'
+                        }
+                    ]
+
+
+
+                });
+
+
+                $("#tblContainer").fadeIn("fast");
+
+            }//if tabela
+        });
+
+
+
+
+
+
+    </script>
+
+}
+
+<style type="text/css">
+    .dt-buttons {
+        float: right !important;
+    }
+</style>
+
+
+

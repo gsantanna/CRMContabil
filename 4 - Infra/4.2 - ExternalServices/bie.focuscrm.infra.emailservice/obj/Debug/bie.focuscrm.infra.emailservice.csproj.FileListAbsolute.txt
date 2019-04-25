@@ -1,0 +1,16 @@
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\bie.focuscrm.infra.emailservice.dll.config
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\bie.focuscrm.infra.emailservice.dll
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\bie.focuscrm.infra.emailservice.pdb
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\Microsoft.AspNet.Identity.Core.dll
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\Newtonsoft.Json.dll
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\SendGrid.CSharp.HTTP.Client.dll
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\SendGrid.dll
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\System.Net.Http.Formatting.dll
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\Microsoft.AspNet.Identity.Core.xml
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\Newtonsoft.Json.xml
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bin\Debug\System.Net.Http.Formatting.xml
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\obj\Debug\bie.focuscrm.infra.emailservice.csprojAssemblyReference.cache
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\obj\Debug\bie.focuscrm.infra.emailservice.csproj.CoreCompileInputs.cache
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\obj\Debug\bie.focuscrm.infra.emailservice.csproj.CopyComplete
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\obj\Debug\bie.focuscrm.infra.emailservice.dll
+C:\DEV\BIFocus\src\4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\obj\Debug\bie.focuscrm.infra.emailservice.pdb

@@ -1,0 +1,5 @@
+C:\DEV\BIFocus\src\5 - Utility\5.1 - Utility\bie.mvc.datatables\bin\Debug\bie.mvc.datatables.dll
+C:\DEV\BIFocus\src\5 - Utility\5.1 - Utility\bie.mvc.datatables\bin\Debug\bie.mvc.datatables.pdb
+C:\DEV\BIFocus\src\5 - Utility\5.1 - Utility\bie.mvc.datatables\obj\Debug\bie.mvc.datatables.csproj.CoreCompileInputs.cache
+C:\DEV\BIFocus\src\5 - Utility\5.1 - Utility\bie.mvc.datatables\obj\Debug\bie.mvc.datatables.dll
+C:\DEV\BIFocus\src\5 - Utility\5.1 - Utility\bie.mvc.datatables\obj\Debug\bie.mvc.datatables.pdb

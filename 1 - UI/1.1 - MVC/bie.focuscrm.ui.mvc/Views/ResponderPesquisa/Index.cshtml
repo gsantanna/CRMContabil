@@ -1,0 +1,64 @@
+﻿@model bie.focuscrm.ui.viewmodel.RespostaPesquisaViewmodel
+
+
+@{
+    ViewBag.Title = "Responder Pesquisa";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("salvar", "responderpesquisa", FormMethod.Post, new { @id = "frmMain", @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.id_respostapesquisa)
+
+    @Html.HiddenFor(model => model.id_pesquisa, htmlAttributes: new { @value = Model.id_pesquisa })
+
+    <div class="col-md-12">
+        @{
+            var lista = Model.Pesquisa.Questoes.ToList();
+
+            lista.Sort((x, y) => x.Ordem.CompareTo(y.Ordem));
+
+            foreach (var questao in lista.Where(x => x.Ativo == true))
+            {
+                var id = "val_" + Model.id_respostapesquisa + '_' + questao.id_questaopesquisa;
+
+                string[] opcoes = questao.Valores.Split(';');
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3><string>@questao.Descricao</string></h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <ul>
+                                @foreach (var opcao in opcoes)
+                                {
+                                    <li style="display:inline-block;padding:0 10px; list-style:none;"><input type="radio" id="@id" name="@id" value="@opcao" /> @opcao</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="panel-body">
+                <div class="col-sm-6 col-sm-offset-3 text-right btn-container">
+                    <button type="submit" class="btn btn-space btn-primary">Salvar</button>
+                </div>
+            </div>
+        }
+
+    </div>
+}
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+}

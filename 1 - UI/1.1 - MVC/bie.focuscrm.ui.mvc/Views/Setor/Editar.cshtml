@@ -1,0 +1,198 @@
+﻿@model bie.focuscrm.ui.viewmodel.SetorViewmodel
+
+
+@{
+    ViewBag.Title = "Modificar Setor";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("editar", "setor", FormMethod.Post, new { @id = "frmMain", @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.id_setor);
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Dados do Setor</h3>
+            </div>
+
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", @style = "" } })
+                            @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.id_usuarioresponsavel, htmlAttributes: new { @class = "control-label col-md-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.DropDownList("id_usuarioresponsavel",
+               (IEnumerable<SelectListItem>)ViewBag.TodosUsuarios,
+               "-Selecione-",
+               new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.id_usuarioresponsavel, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <br />
+                    <h4>Funcionários do Setor</h4>
+                    <hr />
+
+
+
+
+                    <div class="col-sm-4">
+                        @Html.DropDownList("lstEsquerda", (IEnumerable<SelectListItem>)ViewBag.Usuarios, new { @class = "form-control", @multiple = "multiple" }).
+                    </div>
+
+                    <div class="col-md-3 text-center botoes">
+                        <input type='button' id='btnAllRight' value='>>' class="btn btn-default" /><br />
+                        <input type='button' id='btnRight' value='>' class="btn btn-default" /><br />
+                        <input type='button' id='btnLeft' value='<' class="btn btn-default" /><br />
+                        <input type='button' id='btnAllLeft' value='<<' class="btn btn-default" />
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.DropDownList("lstDireita", (IEnumerable<SelectListItem>)ViewBag.Funcionarios, new { @class = "form-control", @multiple = "multiple" }).
+
+
+                    </div>
+
+
+                    <select multiple="multiple" id="FuncionariosSetor" name="FuncionariosSetor" style="display:none;"></select>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="col-sm-6 col-sm-offset-3 text-right btn-container">
+                    <button type="submit" class="btn btn-space btn-primary">Salvar</button>
+
+                    <a href="@Url.Action("Index")" class="btn btn-space btn-default">
+                        Cancelar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script src="~/Scripts/datetimepicker/jquery.datetimepicker.full.min.js"></script>
+    <link href="~/Scripts/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+
+
+        (function () {
+
+
+
+            $('#btnRight').click(function (e) {
+                var selectedOpts = $('#lstEsquerda option:selected');
+                if (selectedOpts.length == 0) {
+                    e.preventDefault();
+                }
+
+                $('#lstDireita').append($(selectedOpts).clone());
+                $(selectedOpts).remove();
+                e.preventDefault();
+            });
+
+            $('#btnAllRight').click(function (e) {
+                var selectedOpts = $('#lstEsquerda option');
+                if (selectedOpts.length == 0) {
+                    e.preventDefault();
+                }
+
+                $('#lstDireita').append($(selectedOpts).clone());
+                $(selectedOpts).remove();
+                e.preventDefault();
+            });
+
+            $('#btnLeft').click(function (e) {
+                var selectedOpts = $('#lstDireita option:selected');
+                if (selectedOpts.length == 0) {
+
+                    e.preventDefault();
+                }
+
+                $('#lstEsquerda').append($(selectedOpts).clone());
+                $(selectedOpts).remove();
+                e.preventDefault();
+            });
+
+            $('#btnAllLeft').click(function (e) {
+                var selectedOpts = $('#lstDireita option');
+                if (selectedOpts.length == 0) {
+                    e.preventDefault();
+                }
+
+                $('#lstEsquerda').append($(selectedOpts).clone());
+                $(selectedOpts).remove();
+                e.preventDefault();
+            });
+
+
+
+
+
+        }(jQuery));
+
+
+
+
+
+        $('#frmMain').submit(function () {
+
+
+            $("#FuncionariosSetor").empty();
+            $("#FuncionariosSetor").append($("#lstDireita option").clone());
+            $("#FuncionariosSetor option").prop("selected", true);
+
+
+        });
+
+
+
+        $(".dtp").datetimepicker({
+            format: 'd/m/y H:i:s',
+            lang: 'pt-BR',
+            closeOnDateSelect: true
+
+        });
+
+        $.datetimepicker.setLocale('pt-BR');
+
+
+
+
+    </script>
+
+}
+
+
+<style type="text/css">
+    #lstEsquerda, #lstDireita {
+        min-height: 160px;
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .botoes input {
+        min-width: 50px;
+        margin-bottom: 5px;
+    }
+</style>

@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewBag.Title = "Atendimentos";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<div class="widget">
+    <div class="widget-head">
+
+        @if (ViewBag.PodeCriar)
+        {
+
+            <a href="@Url.Action("criar", "atendimentos")" class="btn btn-default btn-sm">
+                Adicionar atendimento
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+            </a>
+        }
+
+    </div>
+
+
+    <table class="table" id="tblMain">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Setor</th>
+                <th>Funcionários</th>
+                <th>Empresa</th>
+                <th>Assunto</th>
+
+
+                <!-- botões -->
+                <th style="width:175px; text-align:center;"></th>
+
+            </tr>
+
+        </thead>
+
+    </table>
+
+
+</div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="mdConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="mdConfirmDeleteLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mdConfirmDeleteLabel">Confirma exclusão</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Deseja mesmo excluir este atendimento?</h3><hr>
+                Todos os seus dados serão excluidos.
+                <ul>
+                    <li>ATA</li>
+                    <li>Pendências</li>
+                    <li>Anexos</li>
+                    <li>Comentários</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnExcluir">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section header {
+
+}
+
+@section scripts {
+
+
+    <script type="text/javascript">
+
+
+
+
+
+
+        var tabela;
+
+        $(document).ready(function () {
+
+
+            $.extend($.fn.dataTableExt.oSort, {
+
+                "date-uk-pre": function (a) {
+                    if (a == null || a == "") {
+                        return 0;
+                    }
+                    //0123456789012345678
+                    //10/10/2010 22:00:00
+
+                    var d = a.substring(0, 10).split('/');
+                    var m = a.substring(11).split(':');
+
+                    var saida = d[2] + d[1] + d[0] + IsNull(m[0], "00") + IsNull(m[1], "00") + IsNull(m[2], "00");
+
+                    return saida * 1;
+
+                },
+
+                "date-uk-asc": function (a, b) {
+                    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                },
+
+                "date-uk-desc": function (a, b) {
+                    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+                }
+            });
+
+
+
+            tabela = $('#tblMain').DataTable({
+                responsive: true,
+                language: { url: '@Url.Content("~/content/lib/jquery.datatables/ptbr.json")' },
+                ajax: '@Url.Content("~/atendimentos/getjson?")' + Math.random().toString(36).slice(2),
+                columns: [
+                     {
+                         data: "DataAgendada",
+                         title: "Data",
+                         type: "date-uk",
+                         render: formatDateComplete,
+                         bSortable: true
+                     },
+                      {
+                          data: "NomeSetor",
+                          title: "Setor"
+                      },
+                       {
+                           data: "FuncionariosFocus",
+                           title: "Funcionários"
+                       },
+                        {
+                            data: "NomeEmpresa",
+                            title: "Empresa"
+                        },
+                         {
+                             data: "Assunto",
+                             title: "Assunto"
+                         },
+
+
+                     {
+                         data: "id_atendimento",
+                         title: "Ações",
+                         bSortable: false,
+                         render: function (o, tipo, linha) {
+                             var urlBase = '@Url.Content("~/atendimentos")';
+                             var urlPend = '@Url.Action("index","pendencias")';
+
+                             var ret = "<div style='text-align:center'>";
+
+                             ret += '<a title="Cadastro de Pendências" href="' + urlPend + '?id_atendimento=' + o + '" class="btn btn-default"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a>&nbsp;';
+
+                             ret += '<a title="Visualizar ATA"  href="' + urlBase + '/ata?id_atendimento=' + o + '" class="btn btn-default"><span class="glyphicon glyphicon-file" aria-hidden="true"></span></a>&nbsp;';
+
+                             @if (ViewBag.PodeCriar)
+                             {
+                                 @:ret += '<a title="Editar" href="' + urlBase + '/editar/' + o + '" class="btn btn-default"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>&nbsp;';
+
+                                 @:ret += '<button title="Remover" type="button" class="btn btn-default btn-excluir" onclick="excluir(\'' + o + '\')"      ><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>&nbsp;';
+                             }
+
+                             ret += "</div>";
+                             return ret;
+                         }
+
+                     }
+                ],//fim columns
+                order: [[0, "desc"]]
+
+
+            });//fim datatables
+
+        }); //ready
+
+
+
+
+        var excluir = function (id) {
+            var ml = $('#mdConfirmDelete').modal({ backdrop: 'static', keyboard: false })
+                .one('click', '#btnExcluir', function (e) {
+
+                    $.ajax({
+                        url: '@Url.Content("~/atendimentos/deletar")',
+                        dataType: "json",
+                        type: "POST",
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({ id: id }),
+                        async: true,
+                        processData: false,
+                        cache: false,
+                        success: function (data) {
+                            if (data.status == "Sucesso") {
+                                $(ml).modal("hide");
+                                tabela.ajax.reload();
+                            } else {
+                                alert(data.mensagem);
+                            }
+
+
+                        },
+                        error: function (xhr) {
+                            alert('Erro ao efetuar o comando no servidor. Verifique se o usuário possui as permissões adequadas e tente novamente');
+                        }
+                    });
+
+                });
+        }//excluir
+
+
+
+
+    </script>
+
+}
+

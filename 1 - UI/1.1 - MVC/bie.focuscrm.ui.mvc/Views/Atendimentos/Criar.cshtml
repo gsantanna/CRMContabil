@@ -1,0 +1,358 @@
+﻿@model bie.focuscrm.ui.viewmodel.AtendimentoViewmodel
+
+
+@{
+    ViewBag.Title = "Adicionar Atendimento";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("criar", "atendimentos", FormMethod.Post, new { @id = "frmMain", @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Dados do Atendimento</h3>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="form-horizontal">
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.id_empresa, htmlAttributes: new { @class = "control-label col-sm-3", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.DropDownList("id_empresa", (IEnumerable<SelectListItem>)ViewBag.Empresas, "-Selecione-", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.id_empresa, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.id_filial, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+
+                            @if (Model == null) //Create
+                            {
+                                @Html.DropDownList("id_filial", new List<SelectListItem>(), "Selecione uma empresa", new { @class = "form-control", @disabled = "disabled" })
+                            }
+                            else //Edit
+                            {
+                                @Html.DropDownList("id_filial", (IEnumerable<SelectListItem>)ViewBag.Filiais, "Selecione uma empresa", new { @class = "form-control" })
+
+                            }
+
+                            @Html.ValidationMessageFor(model => model.id_filial, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="form-group">
+
+                        <label class="control-label col-sm-3 " for="UsuariosClienteSelecionados" style="">Responsáveis Cliente</label>
+
+                        <div class="col-sm-6 ">
+
+                            <div class="tbl-seletor tbl-seletor-usuariocliente">
+
+                                @if (Model == null)
+                                {
+                                    @Html.DropDownList("UsuariosClienteSelecionados", new List<SelectListItem>(), new { @class = "form-control", @multiple = "multiple", @disabled = "disabled" })
+                                }
+                                else
+                                {
+                                    @Html.ListBoxFor(m => m.UsuariosClienteSelecionados, (MultiSelectList)ViewBag.UsuariosCliente, new { @class = "form-control", @multiple = "multiple" })
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.id_setor, htmlAttributes: new { @class = "control-label col-sm-3", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.DropDownList("id_setor", (IEnumerable<SelectListItem>)ViewBag.Setores, "-Selecione-", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.id_setor, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label class="control-label col-sm-3 " for="UsuariosFocusSelecionados" style="">Responsáveis Focus</label>
+
+                        <div class="col-sm-6 ">
+
+                            <div class="tbl-seletor tbl-seletor-usuariofocus">
+
+                                @if (Model == null)
+                                {
+                                    @Html.DropDownList("UsuariosFocusSelecionados", new List<SelectListItem>(), new { @class = "form-control", @multiple = "multiple", @disabled = "disabled" })
+                                }
+                                else
+                                {
+                                    @Html.ListBoxFor(m => m.UsuariosFocusSelecionados, (MultiSelectList)ViewBag.UsuariosFocus, new { @class = "form-control", @multiple = "multiple" })
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DataAgendada, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.EditorFor(model => model.DataAgendada, new { htmlAttributes = new { @class = "form-control dtp", @style = "" } })
+                            @Html.ValidationMessageFor(model => model.DataAgendada, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Assunto, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.EditorFor(model => model.Assunto, new { htmlAttributes = new { @class = "form-control", @style = "" } })
+                            @Html.ValidationMessageFor(model => model.Assunto, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+
+
+            <div class="panel-body">
+
+                <div class="col-sm-6 col-sm-offset-3 text-right btn-container">
+                    <button type="submit" class="btn btn-space btn-primary">Salvar</button>
+
+                    <a href="@Url.Action("Index")" class="btn btn-space btn-default">
+                        Cancelar
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+
+}
+
+
+
+<div>
+    @Html.ActionLink("Voltar para a lista", "Index")
+</div>
+
+
+
+<style type="text/css">
+    #lstEsquerda, #lstDireita {
+        min-height: 160px;
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .botoes input {
+        min-width: 50px;
+        margin-bottom: 5px;
+    }
+
+
+    .tbl-seletor {
+        width: 100%;
+    }
+
+    .tbl-seletor-item {
+        width: calc(50% - 24px);
+        float: left;
+    }
+
+    .tbl-seletor-bototes {
+        width: 48px;
+        text-align: center;
+        float: left;
+    }
+
+    .tbl-seletor select {
+        height: 145px;
+    }
+</style>
+
+
+
+
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/datetimepicker/jquery.datetimepicker.full.min.js"></script>
+    <link href="~/Scripts/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            montaCascade({
+                pai: $("#id_empresa"),
+                filho: $("#id_filial"),
+                filho2: $("#UsuariosClienteSelecionados"),
+                endpoint_filho: '@Url.Content("~/empresas/getfiliais/")',
+                endpoint_filho2: '@Url.Content("~/empresas/getusuariosempresa/")',
+                valueFilho: "id_filial",
+                valueFilho2: "id_usuario",
+                displayFilho: "Nome",
+                textopai: "Selecione uma empresa"
+            });
+
+
+            montaCascade({
+                pai: $("#id_setor"),
+                filho: $("#UsuariosFocusSelecionados"),
+                endpoint_filho: '@Url.Content("~/setor/getusuarios/")',
+                valueFilho: "id_usuario",
+                displayFilho: "Nome",
+                textopai: "Selecione o setor"
+            });
+
+
+
+
+
+            $(".dtp").datetimepicker({
+                format: 'd/m/Y H:i:s',
+                //format: 'd/m/Y',
+                lang: 'pt-BR',
+                closeOnDateSelect: true
+
+            });
+
+            $.datetimepicker.setLocale('pt-BR');
+
+
+        }); //rdy
+
+
+
+        var montaCascade = function (cfg) {
+
+            if (!($(cfg.filho).length > 0)) return;
+
+            $(cfg.pai).change(function () {
+
+                if ($(cfg.pai).val() == "0" || $(cfg.pai).val() == "") {
+                    $(cfg.filho).html("").attr("disabled", "disabled");
+                    $(cfg.filho2).html("").attr("disabled", "disabled");
+                    return;
+                };
+
+                //carrega os filhos
+
+
+                var url = cfg.endpoint_filho + $(cfg.pai).val();
+                strFilhos = "";
+                //var strFilhos = "<option value='-1'>-Selecione-</option>";
+                $.getJSON(url,
+                    function (dados) {
+                        $.each(dados,
+                            function (idx, obj) {
+                                strFilhos += "<option value='" + $(obj).attr(cfg.valueFilho) + "'>" + $(obj).attr(cfg.displayFilho) + "</option>";
+                            }
+                        );//each
+
+                        $(cfg.filho).html(strFilhos).removeAttr("disabled");
+                    });//completefunc
+
+                if (typeof (cfg.endpoint_filho2) != 'undefined') {
+
+                    url2 = cfg.endpoint_filho2 + $(cfg.pai).val();
+                    var strFilhos2 = "";
+                    $.getJSON(url2,
+                        function (dados) {
+                            $.each(dados,
+                                function (idx, obj) {
+                                    strFilhos2 += "<option value='" + $(obj).attr(cfg.valueFilho2) + "'>" + $(obj).attr(cfg.displayFilho) + "</option>";
+                                }
+                            );//each
+
+                            $(cfg.filho2).html(strFilhos2).removeAttr("disabled");
+                            $(cfg.filho3).removeAttr("disabled");
+                        });//completefunc
+
+                }
+
+
+
+
+            });//pai.change
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+}
+
+
+
+

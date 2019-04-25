@@ -1,0 +1,323 @@
+﻿@using bie.focuscrm.domain.Enums
+
+@model bie.focuscrm.ui.viewmodel.PendenciaViewmodel
+
+
+@{
+    ViewBag.Title = "Detalhes da pendência";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="col-md-12">
+
+    <div class="panel panel-default" id="dvPendencia">
+        <div class="panel-heading">
+            <h3>Detalhes da Pendência</h3>
+        </div>
+
+        <div class="panel-body">
+            <div class="form-horizontal">
+
+                <div class="form-group">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <h4><strong>Atendimento:</strong> @Model.AssuntoAtendimento</h4>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <h4><strong>Pendência:</strong> @Model.Titulo</h4>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <h4><strong>Status:</strong> @Model.Status</h4>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <h4><strong>Responsável:</strong> @Model.NomeResponsavel</h4>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <h4>
+                            <strong>Prazo:</strong>
+
+                            @if (Model.Status != "Concluído" && Model.Status != "Cancelado" && Model.Prazo < DateTime.Now)
+                            {
+                                <span class="text-warning"><strong>@Model.Prazo.ToString("dd/MM/yyyy HH:mm") (Em atraso) </strong></span>
+                            }
+                            else
+                            {
+                                @Model.Prazo.ToString("dd/MM/yyyy HH:mm")
+                            }
+
+                        </h4>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="panel-heading">
+            <h3>Comentários </h3>
+        </div>
+
+        <div class="panel-body">
+            <!-- Inicio comentários -->
+
+
+            <div class="col-md-10 col-lg-offset-1">
+
+                <a href='javascript:comentar()' class="btn btn-default btn-sm">
+                    Adicionar comentário&nbsp;
+                    <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                </a>
+                <table class="table table-striped table-responsive" id="tbComentarios">
+                    <thead>
+                        <tr>
+                            <th style="width:170px;" class="text-center">Data</th>
+                            <th>Autor</th>
+                            <th>Comentário</th>
+                            <th style="width:25px;"></th>
+                        </tr>
+                    </thead>
+
+                    @if (Model.Comentarios.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="4">Nenhum comentário!</td>
+                        </tr>
+                    }
+
+                    @foreach (var comt in Model.Comentarios.OrderByDescending(x => x.Data))
+                    {
+                        <tr>
+                            <td> @comt.Data.ToString("dd/MM HH:mm") </td>
+                            <td>@comt.NomeAutor </td>
+                            <td>@comt.Conteudo</td>
+                            <td>
+                                @if (ViewBag.Admin || comt.id_autor == ViewBag.id_usuario)
+                                {
+                                    //link para remover
+                                    <button title="Remover" type="button" class="btn btn-default btn-excluir" onclick="excluirComentario(@comt.id_pendenciacomentario)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+
+                                }
+
+                            </td>
+                        </tr>
+                    }
+
+
+                </table>
+            </div>
+
+
+            <!-- Fim comentários -->
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="mdComentar" tabindex="-1" role="dialog" aria-labelledby="mdComentarLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mdComentarLabel">Comentar</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <input type="text" id="txtCmnt" class="form-control" maxlength="255" placeholder="Digite seu comentário..." />
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btnComentar">Adicionar comentário</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div>
+    @if(ViewBag.FromATA != null && ViewBag.FromATA)
+    {
+        @Html.ActionLink("Voltar para a ATA","ATA", "Atendimentos", new { id_atendimento = Model.id_atendimento }, new { })
+      
+    }
+    else if (((int?)ViewBag.id_atendimento).HasValue)
+    {
+        <a title="Voltar para a lista" href='@Url.Action("index", "pendencias", new {id_atendimento = ((int?) ViewBag.id_atendimento).Value})'>Voltar para a lista</a>
+    }
+    else
+    {
+        @Html.ActionLink("Voltar para a lista", "Index")
+
+    }
+</div>
+
+
+<br/><br/>
+
+
+
+@section Scripts {
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+
+
+        }); //rdy
+
+
+
+        var comentar = function () {
+
+            var ml = $('#mdComentar').modal({ backdrop: 'static', keyboard: false })
+               .one('click',
+                   '#btnComentar',
+                   function (e) {
+                       var data = new FormData();
+                       data.append("id_pendencia", "@Model.id_pendencia");
+                       data.append("Conteudo", $("#txtCmnt").val());
+
+                       $.ajax({
+                           url: '@Url.Action("comentar", "pendencias")',
+                           type: 'POST',
+                           data: data,
+                           cache: false,
+                           dataType: 'json',
+                           processData: false,
+                           contentType: false,
+                           success: function (data) {
+                               if (data.status == "sucesso") {
+                                   recarregaGrid();
+                                   $("#txtCmnt").val("");
+                                   $(ml).modal("hide");
+                               } else {
+                                   alert(data.mensagem);
+                               }
+                           },
+                           error: function (jqXHR) {
+                               alert("Erro ao efetuar o comando. Verifique as permissões do usuário e tente ovamente");
+                           }
+                       });
+
+
+                   });
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+        var excluirComentario = function (id) {
+
+            var data = new FormData();
+            data.append("id", id);
+            $.ajax({
+                url: '@Url.Action("RemoverComentario", "pendencias")',
+                type: 'POST',
+                data: data,
+                cache: false,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.status == "sucesso") {
+                        recarregaGrid();
+                    } else {
+                        alert(data.mensagem);
+                    }
+                },
+                error: function (jqXHR) {
+                    alert("Erro ao efetuar o comando. Verifique as permissões do usuário e tente ovamente");
+                }
+            });
+
+
+        }
+
+        //recarrega o grid de comentários
+        var recarregaGrid = function () {
+
+            var loadimg = '@Url.Content("~/Content/Imagens/loading.gif")';
+            $("#tbComentarios tr:not(:first)").remove();
+            $('#tbComentarios tr:last').after('<tr><td>' +
+                "<img src='" +
+                loadimg +
+                "' style='width:20px;' />" +
+                '</td><td></td></tr>');
+
+            $.ajax({
+                url: '@Url.Action("GetComentarios", "pendencias", new {id = Model.id_pendencia})',
+                type: 'GET',
+                cache: false,
+                dataType: 'json',
+                success: function (data) {
+
+                    $("#tbComentarios tr:not(:first)").remove();
+                    $(data).each(function (idx, obj) {
+                        var btnEditar = "";
+
+                        if (obj.editar) {
+                            btnEditar +=
+                                '<button title="Remover" type="button" class="btn btn-default btn-excluir" onclick="excluirComentario(' + obj.id_comentario + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        }
+
+                        $('#tbComentarios tr:last').after('<tr><td>' + obj.data + '</td><td>' + obj.nomeautor + '</td><td>' + obj.conteudo + '</td><td>' + btnEditar + '</td></tr>');
+                    });//each
+
+                },
+                error: function (jqXHR) {
+                    alert("Erro ao atualizar os anexos");
+                }
+            });
+
+        }
+
+    </script>
+
+
+}
+

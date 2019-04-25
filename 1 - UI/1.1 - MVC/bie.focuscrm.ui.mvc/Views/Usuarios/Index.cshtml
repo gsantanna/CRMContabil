@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "Gerenciar Usuários";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<div class="widget">
+    <div class="widget-head">
+        <a href="@Url.Action("criar", "usuarios")" class="btn btn-default btn-sm">
+            Adicionar Usuário
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+        </a>
+    </div>
+
+
+    <table class="table" id="tblMain">
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Empresa</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Celular</th>
+
+
+                <!-- botões -->
+                <th style="width:133px; text-align:center;"></th>
+
+            </tr>
+
+        </thead>
+
+    </table>
+
+
+</div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="mdConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="mdConfirmDeleteLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mdConfirmDeleteLabel">Confirma exclusão</h4>
+            </div>
+            <div class="modal-body">
+                Deseja mesmo excluir este item? Todos os dados serão excluídos inclusive as informações de acesso.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnExcluir">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section header {
+
+}
+
+@section scripts {
+
+
+    <script type="text/javascript">
+
+
+        var tabela;
+
+        $(document).ready(function () {
+
+            tabela = $('#tblMain').DataTable({
+                responsive: true,
+                language: { url: '@Url.Content("~/content/lib/jquery.datatables/ptbr.json")' },
+                ajax: '@Url.Content("~/usuarios/getjson")',
+                columns: [
+                     {
+                         data: "TipoDesc",
+                         title: "Tipo"
+                     },
+                      {
+                          data: "EmpresaDesc",
+                          title: "Empresa"
+                      },
+                       {
+                           data: "Nome",
+                           title: "Nome",
+                           render: function(o, tipo, linha) {
+                               return '<a href=mailto:' + linha.Email + '>' + linha.Nome + '</a>';
+                           }
+                       },
+                        {
+                            data: "Telefone",
+                            title: "Telefone"
+                        },
+                         {
+                             data: "Telefone2",
+                             title: "Celular"
+                         },
+
+
+                     {
+                         data: "id_usuario",
+                         title: "Ações",
+                         bSortable: false,
+                         render: function (o, tipo, linha) {
+                             var urlBase = '@Url.Content("~/usuarios/editar/")';
+
+                             var ret = '<a href="' + urlBase + o + '" class="btn btn-default"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>&nbsp;';
+
+                             ret += '<button type="button" title="' + (linha.Ativo ? 'Desativar' : 'Ativar') + '" class="btn btn-default" onclick="ativacao(\'' + o + '\')"><span class="glyphicon glyphicon-' + (linha.Ativo ? 'stop' : 'play') + ' aria-hidden="true"></span></button>&nbsp;';
+
+                             ret += '<button type="button" class="btn btn-default btn-excluir" onclick="excluir(\'' + o + '\')"      ><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>&nbsp;';
+                             return ret;
+                         }
+
+                     }
+                ],//fim columns
+                order: [[1, "asc"]]
+
+
+            });//fim datatables
+
+        }); //ready
+
+
+
+
+        var excluir = function (id) {
+            var ml = $('#mdConfirmDelete').modal({ backdrop: 'static', keyboard: false })
+                .one('click', '#btnExcluir', function (e) {
+
+                    $.ajax({
+                        url: '@Url.Content("~/usuarios/deletar")',
+                        dataType: "json",
+                        type: "POST",
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({ id: id }),
+                        async: true,
+                        processData: false,
+                        cache: false,
+                        success: function (data) {
+                            $(ml).modal("hide");
+                            tabela.ajax.reload();
+                        },
+                        error: function (xhr) {
+                            alert('Erro ao efetuar o comando no servidor. Verifique se o usuário possui as permissões adequadas e tente novamente');
+                        }
+                    });
+
+                });
+        }//excluir
+
+
+
+        var ativacao = function (id) {
+            $.ajax({
+                url: '@Url.Content("~/usuarios/ativacao")',
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ id: id }),
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    tabela.ajax.reload();
+                },
+                error: function (xhr) {
+                    alert('Erro ao efetuar o comando no servidor. Verifique se o usuário possui as permissões adequadas e tente novamente');
+                }
+            });
+
+        }
+
+
+
+
+    </script>
+
+}
+

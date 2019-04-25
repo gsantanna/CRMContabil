@@ -1,0 +1,175 @@
+﻿@model bie.focuscrm.ui.viewmodel.UsuarioViewmodel
+
+
+@{
+    ViewBag.Title = "Adicionar Usuario";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("criar", "usuarios", FormMethod.Post, new { @id = "frmMain", @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Dados do usuário</h3>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="form-horizontal">
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.id_empresa, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.DropDownList("id_empresa", (IEnumerable<SelectListItem>)ViewBag.Empresas, "Sem Associação", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.id_empresa, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Funcao, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.DropDownList("Funcao", (IEnumerable<SelectListItem>)ViewBag.TiposUsuarios, "-Selecione-", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Funcao, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", @style = "" } })
+                            @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @style = "" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Telefone, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.EditorFor(model => model.Telefone, new { htmlAttributes = new { @class = "form-control", @style = "" } })
+                            @Html.ValidationMessageFor(model => model.Telefone, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Telefone2, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.EditorFor(model => model.Telefone2, new { htmlAttributes = new { @class = "form-control", @style = "" } })
+                            @Html.ValidationMessageFor(model => model.Telefone2, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+
+
+                    
+                    <div class="form-group">
+                       
+                        
+                            @Html.LabelFor(model => model.Senha, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                            <div class="col-sm-2">
+                                @Html.EditorFor(model => model.Senha, new { htmlAttributes = new { @class = "form-control", @style = "" } })
+                                @Html.ValidationMessageFor(model => model.Senha, "", new { @class = "text-danger" })
+                            </div>
+                        
+                        
+                        
+                            @Html.LabelFor(model => model.ConfirmarSenha, htmlAttributes: new { @class = "control-label col-sm-2 ", @style = "" })
+                            <div class="col-sm-2">
+                                @Html.EditorFor(model => model.ConfirmarSenha, new { htmlAttributes = new { @class = "form-control", @style = "" } })
+                                @Html.ValidationMessageFor(model => model.ConfirmarSenha, "", new { @class = "text-danger" })
+                            </div>
+                        
+                        
+
+                        
+
+                    </div>
+                    
+
+                    
+
+
+                </div>
+            </div>
+
+
+            <div class="panel-body">
+
+                <div class="col-sm-6 col-sm-offset-3 text-right btn-container">
+                    <button type="submit" class="btn btn-space btn-primary">Salvar</button>
+
+                    <a href="@Url.Action("Index")" class="btn btn-space btn-default">
+                    Cancelar</a>
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+
+}
+
+
+
+<div>
+    @Html.ActionLink("Voltar para a lista", "Index")
+</div>
+
+
+
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+
+        //$("#frmMain").on("submit", function() {
+        //    $("[data-valmsg-for='id_empresa']").html("").hide();
+
+        //    //se a função é Cliente a empresa é obrigatória
+        //    if ( $("#Funcao").val() == "Cliente" && $("#id_empresa").val() <= 0) {
+        //        $("[data-valmsg-for='id_empresa']").html("Para usuários do tipo Cliente a empresa é obrigatória. Favor selecionar uma rempresa").show();
+        //        $("#id_empresa").focus();
+        //        return false;
+        //    }
+
+        //});
+
+
+    </script>
+
+
+}
+

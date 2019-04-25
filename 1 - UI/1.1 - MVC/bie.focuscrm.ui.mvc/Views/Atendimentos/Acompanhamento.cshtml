@@ -1,0 +1,320 @@
+﻿
+@model bie.focuscrm.ui.viewmodel.AcompanhamentoViewmodel
+
+@using bie.focuscrm.domain.Entities.StoredProcedures
+
+
+@{
+    ViewBag.Title = "Acompanhamento de atendimento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .hidden {
+        display: none;
+    }
+
+    .tbl-main {
+        display: none;
+    }
+
+    .panel-heading {
+        border-bottom: none !important;
+    }
+
+    .table {
+        border-top: 1px solid #ddd;
+    }
+
+        .table thead {
+            background-color: #4e4e4e;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+        }
+
+
+
+    .mes {
+        min-width: 56px;
+        width: 56px;
+        max-width: 56px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .cab {
+        text-align: center;
+    }
+
+    .empresa, .filial {
+        text-align: center;
+    }
+
+    .destacar {
+        color: #fff;
+        background-color: #ec4444;
+    }
+
+    .ok {
+        background-color: #0475b3;
+        color: #fff;
+    }
+
+    .main-content {
+        padding-left:0px !important;
+        padding-right:0px !important;
+    }
+</style>
+
+
+
+
+<div class="col-md-12 ">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="form-horizontal">
+
+
+
+
+                @using (Html.BeginForm("acompanhamento", "atendimentos", FormMethod.Get, new { @id = "frmMain", @enctype = "multipart/form-data" }))
+                {
+
+                    <div class="form-group">
+
+                        <div class="col-sm-1">
+                            <select name="id_ano" id="id_ano" class="form-control" style="min-width:80px;">
+                                <option value="2017" selected>2017</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <input name="filtro" id="filtro" class="form-control" placeholder="Pesquisar" value="@ViewBag.filtro" />
+                        </div>
+
+                        <div class="col-sm-1">
+                            <button type="submit" style="height:42px;" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                        </div>
+
+                    </div>
+
+
+
+                }
+
+            </div>
+        </div>
+
+
+        <div class="panel-body">
+
+            <div class="text-center" style="width:100%;">
+                <img src="~/Content/imagens/loading.gif" id="load" class="text-center" style="width:80px;" />
+            </div>
+
+            @foreach (var emp in Model.Acomp.Select(x => x.id_empresa).Distinct())
+            {
+
+
+                <table class="table table-bordered table-responsive tbl-main" id="tbl-main" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="cab" width="33%">Grupo</th>
+                            <th class="cab" width="33%">Empresa</th>
+                            @*<th class="cab" width="24%">Filiais</th>*@
+                            <th class="cab setor" width="33%">Setor</th>
+
+                            <th class="mes">Jan</th>
+                            <th class="mes">Fev</th>
+                            <th class="mes">Mar</th>
+                            <th class="mes">Abr</th>
+                            <th class="mes">Mai</th>
+                            <th class="mes">Jun</th>
+                            <th class="mes">Jul</th>
+                            <th class="mes">Ago</th>
+                            <th class="mes">Set</th>
+                            <th class="mes">Out</th>
+                            <th class="mes">Nov</th>
+                            <th class="mes">Dez</th>
+                            @*<th class="detalhe" >Detalhes</th>*@
+                        </tr>
+                    </thead>
+
+
+                    @{
+                        var detalhesEmpresa = Model.GetDetalheEmpresa(emp);
+                    }
+
+                    @foreach (AcompanhamentoAtendimentoMacro item in Model.Acomp.Where(e => e.id_empresa == emp).OrderBy(x => x.grupo).ThenBy(y => y.nome_empresa).ThenBy(z => z.nome_setor))
+                    {
+
+
+                        <tr class="empresa">
+                            <td>@item.grupo  </td>
+
+
+                            <td class="tpp" data-tooltip-content='#dv-status-empresa-@item.id_empresa'>
+                                @item.nome_empresa
+                                <div style="display:none;">
+                                    <span id='dv-status-empresa-@item.id_empresa' style="">
+                                        @Html.Raw(detalhesEmpresa)
+                                    </span>
+                                </div>
+                            </td>
+
+
+
+
+                            @*<td class="filial">@item.filiais </td>*@
+
+
+
+
+
+                            @if (!item.intervalo_ultima_visita.HasValue || item.intervalo_ultima_visita > item.intervalo_parametro)
+                            {
+                                <td class="destacar tpp" title='@(item.intervalo_ultima_visita.HasValue ? "Esta empresa não recebe atendimento no setor á " + item.intervalo_ultima_visita + " dias!" : "Empresa não tem atendimentos cadastrados para este setor")'>
+                                    @item.nome_setor
+                                </td>
+                            }
+                            else if (item.qtdpendencias > 0)
+                            {
+                                <td class="destacar tpp" title='@string.Format("Setor com {0} pendencia{1} em aberto",   item.qtdpendencias ,  item.qtdpendencias >1 ? "s" : "")'>
+                                    @item.nome_setor
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="ok">
+                                    @item.nome_setor
+                                </td>
+                            }
+
+
+
+
+
+
+
+
+
+
+
+
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 1)) <!-- Jan @item.id_setor --> </td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 2)) <!-- fev @item.id_setor --> </td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 3)) <!-- mar @item.id_setor --></td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 4)) <!-- abr @item.id_setor --></td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 5)) <!-- mai @item.id_setor --></td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 6)) <!-- jun @item.id_setor --></td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 7)) <!-- jul @item.id_setor --></td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 8)) <!-- ago @item.id_setor --></td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 9)) <!-- set @item.id_setor --></td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 10)) <!-- out @item.id_setor --></td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 11)) <!-- nov @item.id_setor --></td>
+                            <td> @Html.Raw(Model.GetDetalhePeriodo(item.id_empresa, item.id_setor, 12)) <!-- dez @item.id_setor --></td>
+
+                            @*<td style=""> ATAS: @Html.Raw(Model.GetTotalEmpresa(item.id_empresa))</td>*@
+
+                        </tr>
+                    }
+
+
+
+
+
+
+
+                </table>
+
+
+
+
+                        }
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+    @section scripts
+    {
+
+
+        <link href="~/Content/lib/tooltipster-master/dist/css/tooltipster.bundle.min.css" rel="stylesheet" />
+        <link href="~/Content/lib/tooltipster-master/dist/js/plugins/tooltipster/follower/css/tooltipster-follower.min.css" rel="stylesheet" />
+
+
+        <script src="~/Content/lib/tooltipster-master/dist/js/tooltipster.main.min.js"></script>
+        <script src="~/Content/lib/tooltipster-master/dist/js/tooltipster.bundle.min.js"></script>
+        <script src="~/Content/lib/tooltipster-master/dist/js/plugins/tooltipster/follower/js/tooltipster-follower.min.js"></script>
+
+
+        <script type="text/javascript">
+
+            function MergeCommonRows(table) {
+                var firstColumnBrakes = [];
+                // iterate through the columns instead of passing each column as function parameter:
+                for (var i = 1; i <= table.find('th').length; i++) {
+                    var previous = null, cellToExtend = null, rowspan = 1;
+                    table.find("td:nth-child(" + i + ")").each(function (index, e) {
+                        var jthis = $(this), content = jthis.html();
+                        // check if current row "break" exist in the array. If not, then extend rowspan:
+                        if (previous == content && content !== "" && $.inArray(index, firstColumnBrakes) === -1) {
+                            // hide the row instead of remove(), so the DOM index won't "move" inside loop.
+                            jthis.addClass('hidden');
+                            cellToExtend.attr("rowspan", (rowspan = rowspan + 1));
+                        } else {
+                            // store row breaks only for the first column:
+                            if (i === 1) firstColumnBrakes.push(index);
+                            rowspan = 1;
+                            previous = content;
+                            cellToExtend = jthis;
+                        }
+                    });
+                }
+                // now remove hidden td's (or leave them hidden if you wish):
+                $('td.hidden').remove();
+            }
+
+
+
+            $(document).ready(function () {
+                setTimeout(function () {
+                    MergeCommonRows($(".tbl-main"));
+                    $("#load").hide();
+                    $(".cab").width(parseInt(($($(".tbl-main")[0]).width() - (56 * 12)) / 3));
+                    $(".tbl-main").fadeIn();
+
+
+                    $('.tpp').tooltipster({
+                        theme: "shadow",
+                        side: "right",
+                        plugins: ['follower']
+
+                    });
+
+
+                }, 10);
+
+            });
+
+
+            var atendimento = function (id) {
+                alert(id);
+            }
+
+
+        </script>
+
+
+    }
+
+
+

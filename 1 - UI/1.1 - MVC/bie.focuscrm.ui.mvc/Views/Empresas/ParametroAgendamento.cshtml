@@ -1,0 +1,172 @@
+﻿@{
+    ViewBag.Title = "Gerenciar Parâmetros de Agendamento";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="widget">
+    <div class="widget-head">
+        <a href="@Url.Action("editar", "empresas", new { id = Request.Params["id_empresa"] })" class="btn  btn-default btn-sm">
+            Voltar para a Empresa
+            <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+        </a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn  btn-default btn-sm" onclick="salvar()">Salvar <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></button>
+
+        @Html.Hidden("id_empresa", Request.Params["id_empresa"])
+    </div>
+    
+    <table class="table" id="tblMain">
+        <thead>
+            <tr>
+                <th style="width:400px;">Setor</th>
+                <th>Intervalo</th>
+
+                <!-- botões -->
+                <th style="width:45px; text-align:center;"></th>
+
+            </tr>
+
+        </thead>
+
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="mdErro" tabindex="-1" role="dialog" aria-labelledby="mdErroLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mdConfirmDeleteLabel">Parâmetros de Agendamento</h4>
+            </div>
+            <div class="modal-body">
+                Parâmetros salvos com sucesso.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section header {
+
+
+}
+
+@section scripts {
+
+
+
+    <script type="text/javascript">
+
+
+        var tabela;
+
+        $(document).ready(function () {
+
+
+            $.extend($.fn.dataTableExt.oSort, {
+
+                "date-uk-pre": function (a) {
+                    if (a == null || a == "") {
+                        return 0;
+                    }
+                    //0123456789012345678
+                    //10/10/2010 22:00:00
+
+                    var d = a.substring(0, 10).split('/');
+                    var m = a.substring(11).split(':');
+
+                    var saida = d[2] + d[1] + d[0] + IsNull(m[0], "00") + IsNull(m[1], "00") + IsNull(m[2], "00");
+
+                    return saida * 1;
+
+                },
+
+                "date-uk-asc": function (a, b) {
+                    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                },
+
+                "date-uk-desc": function (a, b) {
+                    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+                }
+            });
+
+
+            var id = @Request.Params["id_empresa"];
+
+            tabela = $('#tblMain').DataTable({
+                language: { url: '@Url.Content("~/content/lib/jquery.datatables/ptbr.json")' },
+                ajax: '@Url.Content("~/empresas/getjsonparametroagendamento?id_empresa=")' + id,
+                columns: [
+                    {
+                        data: "SetorNome",
+                        title: "Setor"
+                    },
+                    {
+                        data: "Intervalo",
+                        title: "Intervalo",
+                        render: function (data, type, row) {
+                            return '<input type="text" id="intervalo_' + row.id_setor + '" value="' + data + '" style="width:60px;text-align:center;"/>';
+                        }
+                    },
+                    {
+                        data: "id_setor",
+                        title: "",
+                        sortable: false,
+                        visible: false
+                    }
+                ],//fim columns
+                order: [[0, "asc"]]
+
+
+            });//fim datatables
+
+        }); //ready
+
+        var salvar = function () {
+            var erros = 0;
+
+            var id_empresa = $('#id_empresa').val();
+
+            var tabela = $('#tblMain').DataTable();
+
+            var data = tabela.rows().data();
+
+            for (var i = 0; i < data.length; i++)
+            {
+                id_setor = data[i].id_setor;
+
+                intervalo = $('#intervalo_' + id_setor).val();
+                
+                $.ajax({
+                    url: '@Url.Content("~/empresas/salvarParametroAgendamento")',
+                    dataType: "json",
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({ id_empresa: id_empresa, id_setor: id_setor, intervalo: intervalo }),
+                    async: false,
+                    processData: false,
+                    cache: false,
+                    error: function (xhr) {
+                        erros++;
+                    }
+                });
+            }
+
+            if (erros != 0)
+            {
+                $('.mdConfirmDeleteLabel').html('Ocorreu um erro');
+                $('.modal-body').html('Ocorreu um erro durante a operação. Tente novamente.');
+            }
+
+            $('#mdErro').modal({ backdrop: 'static', keyboard: false });
+
+            tabela.ajax.reload();
+        }//salvar
+    </script>
+
+}

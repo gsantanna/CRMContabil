@@ -1,0 +1,178 @@
+﻿@using bie.focuscrm.domain.Enums
+@model bie.focuscrm.ui.viewmodel.PendenciaViewmodel
+
+
+@{
+    ViewBag.Title = "Editar pendência";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("editar", "pendencias", FormMethod.Post, new { @id = "frmMain", @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.id_pendencia)
+
+
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Editar pendência</h3>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="form-horizontal">
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                    <div class="form-group">
+                        <div class="col-sm-6 col-sm-offset-3"> <h4>Atendimento:  @Model.AssuntoAtendimento</h4></div>
+
+                    </div>
+
+
+                    @Html.HiddenFor(model => model.id_atendimento)
+
+                    @Html.HiddenFor(model => model.id_atendimentopassado)
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Titulo, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+                            @Html.EditorFor(model => model.Titulo, new { htmlAttributes = new { @class = "form-control", @style = "" } })
+                            @Html.ValidationMessageFor(model => model.Titulo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                       
+                        
+                        @Html.LabelFor(model => model.id_responsavel, htmlAttributes: new { @class = "control-label col-sm-3", @style = "" })
+                        <div class="col-sm-3">
+                            
+                            
+                            @if (((TipoUsuario) ViewBag.TipoUsuarioAtual) == TipoUsuario.Setor)
+                            {
+                                @Model.NomeResponsavel
+
+                                @Html.HiddenFor(model=> model.id_responsavel)
+                            }
+                            else
+                            {
+                                @Html.DropDownList("id_responsavel", (IEnumerable<SelectListItem>
+                                )ViewBag.Usuarios, "-Selecione-", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.id_responsavel, "", new { @class = "text-danger" })
+
+                            }
+
+                                                        
+                            
+
+                        </div>
+                        
+                        
+
+
+                        @Html.LabelFor(model => model.Prazo, htmlAttributes: new { @class = "control-label col-sm-1 ", @style = "" })
+                        <div class="col-sm-2">
+                            @Html.EditorFor(model => model.Prazo, new { htmlAttributes = new { @class = "form-control dtp", @style = "" } })
+                            @Html.ValidationMessageFor(model => model.Prazo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-sm-3 ", @style = "" })
+                        <div class="col-sm-6">
+
+                            @Html.DropDownList("Status", (IEnumerable<SelectListItem>)ViewBag.TipoStatus, "-Selecione-", new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <div class="panel-body">
+
+                <div class="col-sm-6 col-sm-offset-3 text-right btn-container">
+                    <button type="submit" class="btn btn-space btn-primary">Salvar</button>
+
+                    <a href='@Url.Action("Index")' class="btn btn-space btn-default">
+                        Cancelar
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+}
+
+
+
+<div>
+    @if (((int?)ViewBag.id_atendimento).HasValue)
+    {
+        <a title="Voltar para a lista" href='@Url.Action("index", "pendencias", new {id_atendimento = ((int?) ViewBag.id_atendimento).Value})'>Voltar para a lista</a>
+    }
+    else
+
+    {
+        @Html.ActionLink("Voltar para a lista", "Index")
+
+    }
+</div>
+
+
+
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/datetimepicker/jquery.datetimepicker.full.min.js"></script>
+    <link href="~/Scripts/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $(".dtp").datetimepicker({
+                format: 'd/m/Y H:i:s',
+                //format: 'd/m/Y',
+                lang: 'pt-BR',
+                closeOnDateSelect: true
+
+            });
+
+            $.datetimepicker.setLocale('pt-BR');
+
+
+        }); //rdy
+
+    </script>
+
+
+}
+

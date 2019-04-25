@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewBag.Title = "Gerenciar Pesquisas";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="widget">
+    <div class="widget-head">
+        <a href="@Url.Action("criar", "pesquisa")" class="btn  btn-default btn-sm">
+            Adicionar Pesquisa
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <table class="table" id="tblMain">
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Titulo</th>
+                <th>Última Edição</th>
+
+                <!-- botões -->
+                <th style="width:180px; text-align:center;"></th>
+
+            </tr>
+
+        </thead>
+
+    </table>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="mdConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="mdConfirmDeleteLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mdConfirmDeleteLabel">Confirma exclusão</h4>
+            </div>
+            <div class="modal-body">
+                Deseja mesmo excluir este item? Todos os dados serão excluídos inclusive as informações de acesso do mesmo.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnExcluir">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section header {
+
+    
+}
+
+@section scripts {
+    
+    
+
+    <script type="text/javascript">
+
+
+        var tabela;
+
+        $(document).ready(function () {
+
+
+            $.extend($.fn.dataTableExt.oSort, {
+
+                "date-uk-pre": function (a) {
+                    if (a == null || a == "") {
+                        return 0;
+                    }
+                    //0123456789012345678
+                    //10/10/2010 22:00:00
+
+                    var d = a.substring(0, 10).split('/');
+                    var m = a.substring(11).split(':');
+
+                    var saida = d[2] + d[1] + d[0] + IsNull(m[0], "00") + IsNull(m[1], "00") + IsNull(m[2], "00");
+
+                    return saida * 1;
+
+                },
+
+                "date-uk-asc": function (a, b) {
+                    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                },
+
+                "date-uk-desc": function (a, b) {
+                    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+                }
+            });
+
+
+
+
+            tabela = $('#tblMain').DataTable({
+                language: { url: '@Url.Content("~/content/lib/jquery.datatables/ptbr.json")' },
+                ajax: '@Url.Content("~/pesquisa/getjson")',
+                columns: [
+                    {
+                        data: "tp_pesquisa_desc",
+                        title: "Tipo"
+                    },
+                    {
+                         data: "Titulo",
+                         title: "Título"
+                     },
+                    {
+                        data: "Modificado",
+                        title: "Última Edição",
+                        type: "date-uk",
+                        render: formatDateComplete,
+                        bSortable: true
+
+                    },
+                    {
+                        data: "id_pesquisa",
+                        title: "Ações",
+                        bSortable: false,
+                        render: function (o, tipo, linha) {
+                            var urlBase = '@Url.Content("~/pesquisa/editar/")'
+
+                            var ret = '<a href="@Url.Content("~/QuestaoPesquisa/Index/")' + o + '" class="btn btn-default" title="Questões"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a>&nbsp;';
+
+                            ret += '<a href="' + urlBase + o + '" class="btn btn-default" title="Editar"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>&nbsp;';
+
+                            ret += '<button type="button" title="' + (linha.Ativo ? 'Desativar Pesquisa' : 'Ativar Pesquisa') + '" class="btn btn-default" onclick="ativacao(\'' + o + '\')"><span class="glyphicon glyphicon-' + (linha.Ativo ? 'stop' : 'play') + ' aria-hidden="true"></span></button>&nbsp;';
+
+                            ret += '<button type="button" class="btn btn-default btn-excluir" onclick="excluir(\'' + o + '\')" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                            return ret;
+                        }
+                    }
+                ],//fim columns
+                order: [[0, "asc"], [1, "desc"]]
+
+
+            });//fim datatables
+
+        }); //ready
+
+        var excluir = function (id) {
+            var ml = $('#mdConfirmDelete').modal({ backdrop: 'static', keyboard: false })
+                .one('click', '#btnExcluir', function (e) {
+                    $.ajax({
+                        url: '@Url.Content("~/pesquisa/deletar")',
+                        dataType: "json",
+                        type: "POST",
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({ id: id }),
+                        async: true,
+                        processData: false,
+                        cache: false,
+                        success: function (data) {
+                            $(ml).modal("hide");
+                            tabela.ajax.reload();
+                        },
+                        error: function (xhr) {
+                            alert('Erro ao efetuar o comando no servidor. Verifique se o usuário possui as permissões adequadas e tente novamente');
+                        }
+                    });
+
+                });
+        }//excluir
+
+        var ativacao = function (id) {
+            $.ajax({
+                url: '@Url.Content("~/pesquisa/ativacao")',
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ id: id }),
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    tabela.ajax.reload();
+                },
+                error: function (xhr) {
+                    alert('Erro ao efetuar o comando no servidor. Verifique se o usuário possui as permissões adequadas e tente novamente');
+                }
+            });
+
+        }// ativacao
+    </script>
+
+}

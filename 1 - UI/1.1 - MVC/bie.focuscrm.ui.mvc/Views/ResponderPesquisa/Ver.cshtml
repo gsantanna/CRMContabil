@@ -1,0 +1,39 @@
+﻿@model bie.focuscrm.ui.viewmodel.RespostaPesquisaViewmodel
+
+
+@{
+    ViewBag.Title = "Respostas da Pesquisa";
+    ViewBag.HeaderText = ViewBag.Title;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-12">
+    @{
+        var lista = Model.Pesquisa.Questoes.ToList();
+
+        lista.Sort((x, y) => x.Ordem.CompareTo(y.Ordem));
+
+        foreach (var questao in lista.Where(x => x.Ativo == true))
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Questão: @questao.Descricao</h3>
+                </div>
+
+                @foreach (var resp in Model.Pesquisa.Respostas.FirstOrDefault().Valores.ToList())
+                {
+                    if (resp.id_questao == questao.id_questaopesquisa)
+                    {
+                        <div class="panel-body">
+                            <div class="form-horizontal">
+                                Resposta: @resp.ValorResposta
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    }
+
+</div>

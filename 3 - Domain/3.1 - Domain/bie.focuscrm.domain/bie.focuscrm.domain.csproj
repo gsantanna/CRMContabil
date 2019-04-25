@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{69ED3DD5-56D0-4EB2-B946-C96657E783D2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>bie.focuscrm.domain</RootNamespace>
+    <AssemblyName>bie.focuscrm.domain</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>FocusCRM.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\Alerta.cs" />
+    <Compile Include="Entities\AlertaAlcance.cs" />
+    <Compile Include="Entities\AlertaVisualizacao.cs" />
+    <Compile Include="Entities\Anexo.cs" />
+    <Compile Include="Entities\Arquivo.cs" />
+    <Compile Include="Entities\Atendimento.cs" />
+    <Compile Include="Entities\Comentario.cs" />
+    <Compile Include="Entities\Empresa.cs" />
+    <Compile Include="Entities\Filial.cs" />
+    <Compile Include="Entities\Notification.cs" />
+    <Compile Include="Entities\ParametroAgendamento.cs" />
+    <Compile Include="Entities\Pendencia.cs" />
+    <Compile Include="Entities\Pesquisa.cs" />
+    <Compile Include="Entities\QuestaoPesquisa.cs" />
+    <Compile Include="Entities\RespostaPesquisa.cs" />
+    <Compile Include="Entities\RespostaPesquisaValor.cs" />
+    <Compile Include="Entities\Setor.cs" />
+    <Compile Include="Entities\Usuario.cs" />
+    <Compile Include="Entities\StoredProcedures\AcompanhamentoAtendimento.cs" />
+    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Interfaces\Repository\IAlertaRepository.cs" />
+    <Compile Include="Interfaces\Repository\IAtendimentoRepository.cs" />
+    <Compile Include="Interfaces\Repository\IEmpresaRepository.cs" />
+    <Compile Include="Interfaces\Repository\IFilialRepository.cs" />
+    <Compile Include="Interfaces\Repository\IPendenciaRepository.cs" />
+    <Compile Include="Interfaces\Repository\IPesquisaRepository.cs" />
+    <Compile Include="Interfaces\Repository\IRepositoryBase.cs" />
+    <Compile Include="Interfaces\Repository\IRespostaPesquisaRepository.cs" />
+    <Compile Include="Interfaces\Repository\ISetorRepository.cs" />
+    <Compile Include="Interfaces\Repository\IUsuarioRepository.cs" />
+    <Compile Include="Interfaces\Service\IAlertaService.cs" />
+    <Compile Include="Interfaces\Service\IAtendimentoService.cs" />
+    <Compile Include="Interfaces\Service\IEmpresaService.cs" />
+    <Compile Include="Interfaces\Service\IFilialService.cs" />
+    <Compile Include="Interfaces\Service\IPendenciaService.cs" />
+    <Compile Include="Interfaces\Service\IPesquisaService.cs" />
+    <Compile Include="Interfaces\Service\IRespostaPesquisaService.cs" />
+    <Compile Include="Interfaces\Service\IServiceBase.cs" />
+    <Compile Include="Interfaces\Service\ISetorService.cs" />
+    <Compile Include="Interfaces\Service\IUsuarioService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AlertaService.cs" />
+    <Compile Include="Services\AtendimentoService.cs" />
+    <Compile Include="Services\EmpresaService.cs" />
+    <Compile Include="Services\FilialService.cs" />
+    <Compile Include="Services\PendenciaService.cs" />
+    <Compile Include="Services\PesquisaService.cs" />
+    <Compile Include="Services\RespostaPesquisaService.cs" />
+    <Compile Include="Services\ServiceBase.cs" />
+    <Compile Include="Services\SetorService.cs" />
+    <Compile Include="Services\UsuarioService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FocusCRM.snk" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

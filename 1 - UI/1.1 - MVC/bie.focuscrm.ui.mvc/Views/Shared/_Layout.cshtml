@@ -1,0 +1,256 @@
+﻿@using bie.focuscrm.ui.mvc.Helpers
+@using System.Linq
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Sistema CRM">
+    <meta name="author" content="">
+    <title>Sistema CRM - @ViewBag.Title</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/lib/stroke-7/style.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/lib/jquery.nanoscroller/css/nanoscroller.css" />
+    <link href="~/Content/lib/jquery.datatables/datatables.min.css" rel="stylesheet" />
+
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <link type="text/css" href="~/Content/css/template.css" rel="stylesheet">
+
+    <link href="~/Content/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+
+    @*<link rel="shortcut icon" href='@Url.Content("~/content/imagens/favicon.ico")' />*@
+
+
+
+
+    @RenderSection("header", required: false)
+
+
+
+</head>
+<body>
+    <div class="am-wrapper am-nosidebar-left">
+        <nav class="navbar navbar-default navbar-fixed-top am-top-header">
+            <div class="container-fluid" id="ctn-main">
+                <div class="navbar-header">
+                    <div class="page-title">
+                        <span>
+
+                            CRM Contábil
+
+                        </span>
+                    </div>
+
+
+                    @*@Html.ActionLink(" ", "Index", "Home", new { @class = "navbar-brand" })*@
+
+                    <a href="/" class="navbar-brand"></a>
+
+
+
+
+
+                </div>
+
+
+                <a href="#" data-toggle="collapse" data-target="#am-navbar-collapse" class="am-toggle-top-header-menu collapsed"><span class="icon s7-angle-down"></span></a>
+
+
+
+                <div id="am-navbar-collapse" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right am-user-nav">
+                        <li class="dropdown">
+                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle">
+
+                                @{
+                                    var usuario = IdentityHelper.GetCurrentUser();
+
+                                }
+
+                                Bem vindo (a)  @(usuario != null ? usuario.Nome : "" )
+
+
+
+
+
+                                <span class="user-name">
+                                </span><span class="angle-down s7-angle-down"></span>
+                            </a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li> <a href='@Url.Action("Index","Manage")'><span class="icon s7-user"></span>Meus dados</a></li>
+                                <li><a href='@Url.Action("Manual","Home")'> <span class="icon s7-help1"></span>Manual de Instruções</a></li>
+
+                                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                }
+
+
+
+                                <li><a href='javascript:void(0);' onclick="document.getElementById('logoutForm').submit()"> <span class="icon s7-power"></span>Sair</a></li>
+
+                            </ul>
+                        </li>
+                    </ul>
+
+
+                    <ul class="nav navbar-nav am-nav-right">
+                        @{
+                            string RoleMaiorAcesso = "All";
+
+                            if (User.IsInRole("Administrador"))
+                            {
+                                RoleMaiorAcesso = "Administrador";
+                            }
+                            else if (User.IsInRole("Focus"))
+                            {
+                                RoleMaiorAcesso = "Focus";
+                            }
+                            else if (User.IsInRole("Setor"))
+                            {
+                                RoleMaiorAcesso = "Setor";
+                            }
+                            else if (User.IsInRole("Cliente"))
+                            {
+                                RoleMaiorAcesso = "Cliente";
+                            }
+
+                            //carrega os menus
+                            var menus = IdentityHelper.GetMenuConfig();
+
+                            //carrega os itens sem grupo
+                            foreach (var link in menus.Where(f => string.IsNullOrEmpty(f.Group) && (f.Roles.Contains(RoleMaiorAcesso) || f.Roles.Contains("All"))).OrderBy(x => x.Ordem))
+                            {
+                                <li> @Html.ActionLink(link.LinkText, link.ActionName, link.ControllerName) </li>
+                            }
+
+
+                            //para cada GRUPO
+                            foreach (var grupo in menus.Where(x => !string.IsNullOrEmpty(x.Group)).Select(x => x.Group).Distinct())
+                            {
+                                var items = IdentityHelper.GetMenuConfig().Where(f => f.Group == grupo && (f.Roles.Contains(RoleMaiorAcesso) || f.Roles.Contains("All"))).OrderBy(x => x.Ordem);
+
+                                if (items.Count() > 0)
+                                {
+
+                                    <li class="dropdown">
+                                        <!--style="display:none"-->
+                                        <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle"> @grupo  <span class="angle-down s7-angle-down"></span></a>
+                                        <ul role="menu" class="dropdown-menu">
+
+                                            @foreach (var link in items)
+                                            {
+                                                <li> @Html.ActionLink(link.LinkText, link.ActionName, link.ControllerName) </li>
+                                            }
+
+                                        </ul>
+                                    </li>
+
+                                }
+
+
+                            }
+
+
+
+
+
+
+
+
+
+
+                        }
+
+
+                        @if (User.IsInRole("Administrador"))
+                        {
+
+                            <li class="dropdown">
+                                <!--style="display:none"-->
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle">Relatórios <span class="angle-down s7-angle-down"></span></a>
+                                <ul role="menu" class="dropdown-menu">
+                                    <li>@Html.ActionLink("Acompanhamento de atendimento", "acompanhamento", "atendimentos") </li>
+                                    <li>@Html.ActionLink("Pesquisas de satisfação", "Resposta", "Pesquisa")</li>
+                                </ul>
+                            </li>
+
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Acompanhamento de atendimento", "acompanhamento", "atendimentos") </li>
+                        }
+
+
+
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right am-icons-nav"></ul>
+                </div>
+            </div>
+        </nav>
+
+        @if (!string.IsNullOrWhiteSpace(ViewBag.HeaderText))
+        {
+            <div class="page-head">
+                <h2>@ViewBag.HeaderText</h2>
+            </div>
+        }
+
+
+
+
+
+        <div class="am-content">
+            <div class="main-content">
+
+                <!-- inicio do conteúdo da página -->
+                @RenderBody()
+                <!-- fim do conteúdo da página -->
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    @RenderSection("scripts_pre", required: false)
+
+
+    <script src="~/Content/lib/jquery/jquery.min.js"></script>
+
+    @*<script src="~/Content/lib/jquery.datatables/datatables.min.js"></script>*@
+    <script src="~/Content/lib/jquery.datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/lib/jquery.datatables/dataTables.bootstrap.min.js"></script>
+
+    <script src="~/Content/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+
+
+
+
+
+    <!-- fim validation -->
+
+
+    <script src="~/Scripts/respond.min.js"></script>
+
+
+
+    <script src="~/Scripts/Util.js"></script>
+    <script src="~/Scripts/main.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<h1 class="text-danger">Erro.</h1>
+<h2 class="text-danger">A ação gerou um erro. Já fomos notificados do mesmo e trabalharemos para solucioná-lo o quanto antes. Caso necessite de ajuda 
+    Entre em contato conosco <a href="mailto:focus@biexpert.com.br">clicando aqui</a>.</h2>
+
+
+<!-- 
+    
+    Action Name:  @Model.ActionName 
+    Controller Name: @Model.ControllerName 
+    Exception : @Model.Exception.Message
+    Stack: @Model.Exception.StackTrace
+    User: @User.Identity.Name
+
+   
+
+-->

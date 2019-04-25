@@ -1,0 +1,146 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - UI", "1 - UI", "{1528DA1F-AA1F-441C-AE74-5A4929B2776C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.1 - MVC", "1.1 - MVC", "{FEFE6AC4-596C-4DAE-9353-16EFB01AB8AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.2 - ViewModel", "1.2 - ViewModel", "{7EFA989A-315B-4BAB-A467-487110465AE4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Application", "2 - Application", "{AA1D076D-F706-474D-AF5A-8286D192009E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Domain", "3 - Domain", "{49641721-AC41-4909-AAD8-4EE37ADB2697}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infra", "4 - Infra", "{6E3FDE15-A7E4-4FA2-A538-FE31934A8433}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Utility", "5 - Utility", "{55FCC574-2885-4DB3-AF20-7FE7B0EE8D11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1 - Application", "2.1 - Application", "{4941518E-419A-415A-8BFE-F77A7884CBC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.1 - Domain", "3.1 - Domain", "{DFE340C5-FBA0-45B2-A312-5CBCA0061443}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.1 - Data", "4.1 - Data", "{89DB6892-F9AC-486E-B6F9-B05F36265B81}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.1 - Utility", "5.1 - Utility", "{F47F7C86-61C8-42F4-B883-0588AE944BC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bie.focuscrm.domain", "3 - Domain\3.1 - Domain\bie.focuscrm.domain\bie.focuscrm.domain.csproj", "{69ED3DD5-56D0-4EB2-B946-C96657E783D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bie.focuscrm.ui.mvc", "1 - UI\1.1 - MVC\bie.focuscrm.ui.mvc\bie.focuscrm.ui.mvc.csproj", "{7B08C97F-A58A-4995-9F71-9FEB4BF4ED94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bie.focuscrm.application", "2 - Application\2.1 - Application\bie.focuscrm.application\bie.focuscrm.application.csproj", "{039F6CCC-ACBF-491D-B8C1-EA5F48D18719}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bie.focuscrm.infra.data", "4 - Infra\4.1 - Data\bie.focuscrm.infra.data\bie.focuscrm.infra.data.csproj", "{CEF82B24-EEFF-4A9A-B9A4-4F047EE8C0D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bie.focuscrm.ui.viewmodel", "1 - UI\1.2 - ViewModel\bie.focuscrm.ui.viewmodel\bie.focuscrm.ui.viewmodel.csproj", "{8137A456-8C6C-42C8-BF4B-5E454A74C05C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bie.mvc.datatables", "5 - Utility\5.1 - Utility\bie.mvc.datatables\bie.mvc.datatables.csproj", "{3522E826-2206-456E-9235-70160D5D37B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.2 - External Services", "4.2 - External Services", "{EB4B6B6A-BFCE-469D-9FB1-E695C732C15A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bie.focuscrm.infra.emailservice", "4 - Infra\4.2 - ExternalServices\bie.focuscrm.infra.emailservice\bie.focuscrm.infra.emailservice.csproj", "{FA6FE964-C43C-44A6-ABCA-6B2143BFAB27}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{1FFC1E1C-B8BF-4510-9361-E03621555835}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bie.mvc.utilities", "5 - Utility\5.1 - Utility\bie.mvc.utilities\bie.mvc.utilities.csproj", "{56961961-FA94-4112-9B80-FD004DF32593}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69ED3DD5-56D0-4EB2-B946-C96657E783D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69ED3DD5-56D0-4EB2-B946-C96657E783D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69ED3DD5-56D0-4EB2-B946-C96657E783D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69ED3DD5-56D0-4EB2-B946-C96657E783D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B08C97F-A58A-4995-9F71-9FEB4BF4ED94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B08C97F-A58A-4995-9F71-9FEB4BF4ED94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B08C97F-A58A-4995-9F71-9FEB4BF4ED94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B08C97F-A58A-4995-9F71-9FEB4BF4ED94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{039F6CCC-ACBF-491D-B8C1-EA5F48D18719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{039F6CCC-ACBF-491D-B8C1-EA5F48D18719}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{039F6CCC-ACBF-491D-B8C1-EA5F48D18719}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{039F6CCC-ACBF-491D-B8C1-EA5F48D18719}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEF82B24-EEFF-4A9A-B9A4-4F047EE8C0D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEF82B24-EEFF-4A9A-B9A4-4F047EE8C0D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEF82B24-EEFF-4A9A-B9A4-4F047EE8C0D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEF82B24-EEFF-4A9A-B9A4-4F047EE8C0D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8137A456-8C6C-42C8-BF4B-5E454A74C05C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8137A456-8C6C-42C8-BF4B-5E454A74C05C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8137A456-8C6C-42C8-BF4B-5E454A74C05C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8137A456-8C6C-42C8-BF4B-5E454A74C05C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3522E826-2206-456E-9235-70160D5D37B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3522E826-2206-456E-9235-70160D5D37B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3522E826-2206-456E-9235-70160D5D37B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3522E826-2206-456E-9235-70160D5D37B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA6FE964-C43C-44A6-ABCA-6B2143BFAB27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA6FE964-C43C-44A6-ABCA-6B2143BFAB27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA6FE964-C43C-44A6-ABCA-6B2143BFAB27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA6FE964-C43C-44A6-ABCA-6B2143BFAB27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56961961-FA94-4112-9B80-FD004DF32593}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56961961-FA94-4112-9B80-FD004DF32593}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56961961-FA94-4112-9B80-FD004DF32593}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56961961-FA94-4112-9B80-FD004DF32593}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FEFE6AC4-596C-4DAE-9353-16EFB01AB8AD} = {1528DA1F-AA1F-441C-AE74-5A4929B2776C}
+		{7EFA989A-315B-4BAB-A467-487110465AE4} = {1528DA1F-AA1F-441C-AE74-5A4929B2776C}
+		{4941518E-419A-415A-8BFE-F77A7884CBC8} = {AA1D076D-F706-474D-AF5A-8286D192009E}
+		{DFE340C5-FBA0-45B2-A312-5CBCA0061443} = {49641721-AC41-4909-AAD8-4EE37ADB2697}
+		{89DB6892-F9AC-486E-B6F9-B05F36265B81} = {6E3FDE15-A7E4-4FA2-A538-FE31934A8433}
+		{F47F7C86-61C8-42F4-B883-0588AE944BC4} = {55FCC574-2885-4DB3-AF20-7FE7B0EE8D11}
+		{69ED3DD5-56D0-4EB2-B946-C96657E783D2} = {DFE340C5-FBA0-45B2-A312-5CBCA0061443}
+		{7B08C97F-A58A-4995-9F71-9FEB4BF4ED94} = {FEFE6AC4-596C-4DAE-9353-16EFB01AB8AD}
+		{039F6CCC-ACBF-491D-B8C1-EA5F48D18719} = {4941518E-419A-415A-8BFE-F77A7884CBC8}
+		{CEF82B24-EEFF-4A9A-B9A4-4F047EE8C0D1} = {89DB6892-F9AC-486E-B6F9-B05F36265B81}
+		{8137A456-8C6C-42C8-BF4B-5E454A74C05C} = {7EFA989A-315B-4BAB-A467-487110465AE4}
+		{3522E826-2206-456E-9235-70160D5D37B9} = {F47F7C86-61C8-42F4-B883-0588AE944BC4}
+		{EB4B6B6A-BFCE-469D-9FB1-E695C732C15A} = {6E3FDE15-A7E4-4FA2-A538-FE31934A8433}
+		{FA6FE964-C43C-44A6-ABCA-6B2143BFAB27} = {EB4B6B6A-BFCE-469D-9FB1-E695C732C15A}
+		{1FFC1E1C-B8BF-4510-9361-E03621555835} = {55FCC574-2885-4DB3-AF20-7FE7B0EE8D11}
+		{56961961-FA94-4112-9B80-FD004DF32593} = {F47F7C86-61C8-42F4-B883-0588AE944BC4}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 9
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://rguimaraes.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = 3\u0020-\u0020Domain\\3.1\u0020-\u0020Domain\\bie.focuscrm.domain\\bie.focuscrm.domain.csproj
+		SccProjectTopLevelParentUniqueName1 = Focus\u0020CRM.sln
+		SccProjectName1 = 3\u0020-\u0020Domain/3.1\u0020-\u0020Domain/bie.focuscrm.domain
+		SccLocalPath1 = 3\u0020-\u0020Domain\\3.1\u0020-\u0020Domain\\bie.focuscrm.domain
+		SccProjectUniqueName2 = 1\u0020-\u0020UI\\1.1\u0020-\u0020MVC\\bie.focuscrm.ui.mvc\\bie.focuscrm.ui.mvc.csproj
+		SccProjectTopLevelParentUniqueName2 = Focus\u0020CRM.sln
+		SccProjectName2 = 1\u0020-\u0020UI/1.1\u0020-\u0020MVC/bie.focuscrm.ui.mvc
+		SccLocalPath2 = 1\u0020-\u0020UI\\1.1\u0020-\u0020MVC\\bie.focuscrm.ui.mvc
+		SccProjectUniqueName3 = 2\u0020-\u0020Application\\2.1\u0020-\u0020Application\\bie.focuscrm.application\\bie.focuscrm.application.csproj
+		SccProjectTopLevelParentUniqueName3 = Focus\u0020CRM.sln
+		SccProjectName3 = 2\u0020-\u0020Application/2.1\u0020-\u0020Application/bie.focuscrm.application
+		SccLocalPath3 = 2\u0020-\u0020Application\\2.1\u0020-\u0020Application\\bie.focuscrm.application
+		SccProjectUniqueName4 = 4\u0020-\u0020Infra\\4.1\u0020-\u0020Data\\bie.focuscrm.infra.data\\bie.focuscrm.infra.data.csproj
+		SccProjectTopLevelParentUniqueName4 = Focus\u0020CRM.sln
+		SccProjectName4 = 4\u0020-\u0020Infra/4.1\u0020-\u0020Data/bie.focuscrm.infra.data
+		SccLocalPath4 = 4\u0020-\u0020Infra\\4.1\u0020-\u0020Data\\bie.focuscrm.infra.data
+		SccProjectUniqueName5 = 1\u0020-\u0020UI\\1.2\u0020-\u0020ViewModel\\bie.focuscrm.ui.viewmodel\\bie.focuscrm.ui.viewmodel.csproj
+		SccProjectTopLevelParentUniqueName5 = Focus\u0020CRM.sln
+		SccProjectName5 = 1\u0020-\u0020UI/1.2\u0020-\u0020ViewModel/bie.focuscrm.ui.viewmodel
+		SccLocalPath5 = 1\u0020-\u0020UI\\1.2\u0020-\u0020ViewModel\\bie.focuscrm.ui.viewmodel
+		SccProjectUniqueName6 = 5\u0020-\u0020Utility\\5.1\u0020-\u0020Utility\\bie.mvc.datatables\\bie.mvc.datatables.csproj
+		SccProjectTopLevelParentUniqueName6 = Focus\u0020CRM.sln
+		SccProjectName6 = 5\u0020-\u0020Utility/5.1\u0020-\u0020Utility/bie.mvc.datatables
+		SccLocalPath6 = 5\u0020-\u0020Utility\\5.1\u0020-\u0020Utility\\bie.mvc.datatables
+		SccProjectUniqueName7 = 4\u0020-\u0020Infra\\4.2\u0020-\u0020ExternalServices\\bie.focuscrm.infra.emailservice\\bie.focuscrm.infra.emailservice.csproj
+		SccProjectTopLevelParentUniqueName7 = Focus\u0020CRM.sln
+		SccProjectName7 = 4\u0020-\u0020Infra/4.2\u0020-\u0020ExternalServices/bie.focuscrm.infra.emailservice
+		SccLocalPath7 = 4\u0020-\u0020Infra\\4.2\u0020-\u0020ExternalServices\\bie.focuscrm.infra.emailservice
+		SccProjectUniqueName8 = 5\u0020-\u0020Utility\\5.1\u0020-\u0020Utility\\bie.mvc.utilities\\bie.mvc.utilities.csproj
+		SccProjectTopLevelParentUniqueName8 = Focus\u0020CRM.sln
+		SccProjectName8 = 5\u0020-\u0020Utility/5.1\u0020-\u0020Utility/bie.mvc.utilities
+		SccLocalPath8 = 5\u0020-\u0020Utility\\5.1\u0020-\u0020Utility\\bie.mvc.utilities
+	EndGlobalSection
+EndGlobal
